@@ -170,9 +170,7 @@ export const authService = {
       }
     }
 
-    // Fallback
-    const user = { ...mockUser[intendedRole], fullName: "Google Verified User" };
-    return { user, token: `mock_jwt_token_${intendedRole}` };
+    throw new Error("Could not retrieve Google OAuth session from Supabase.");
   },
 
   /**
