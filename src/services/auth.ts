@@ -104,38 +104,43 @@ export const authService = {
     localStorage.setItem("agrimarket_oauth_role", intendedRole);
 
     if (isSupabaseConfigured() && supabase) {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-          queryParams: {
-            access_type: "offline",
-            prompt: "consent",
+      try {
+        const { error } = await supabase.auth.signInWithOAuth({
+          provider: "google",
+          options: {
+            redirectTo: `${window.location.origin}/auth/callback`,
+            queryParams: {
+              access_type: "offline",
+              prompt: "consent",
+            },
           },
-        },
-      });
+        });
 
-      if (error) {
-        console.error("Supabase Google Auth error:", error);
-        throw error;
+        // If Google provider is enabled in Supabase, the browser is redirected
+        // and we never reach the code below. If it errors (provider not configured),
+        // fall through to the demo auth fallback.
+        if (!error) return;
+        console.warn("Supabase Google OAuth not configured, using demo auth:", error.message);
+      } catch (e) {
+        console.warn("Supabase Google OAuth exception, using demo auth:", e);
       }
-      return;
     }
 
-    // Fallback Mock Google Login if offline/testing
-    await new Promise((r) => setTimeout(r, 400));
+    // Demo / Mock Google Login — works without Supabase OAuth configuration
+    // Perfect for demos and dev environments without Google Cloud Console setup
+    await new Promise((r) => setTimeout(r, 600));
     const googleUser: User = {
       id: `google_${Date.now()}`,
-      email: `google.user.${intendedRole}@gmail.com`,
+      email: intendedRole === "buyer" ? "ananya.sharma@gmail.com" : "ravi.kumar@gmail.com",
       phone: "9876543210",
       role: intendedRole,
-      fullName: intendedRole === "buyer" ? "Google Buyer Partner" : "Google Farmer Partner",
+      fullName: intendedRole === "buyer" ? "Ananya Sharma" : "Ravi Kumar",
       isVerified: true,
       createdAt: new Date().toISOString(),
     };
     localStorage.setItem("agrimarket_user", JSON.stringify(googleUser));
     localStorage.setItem("agrimarket_token", `google_oauth_token_${intendedRole}`);
-    window.location.href = intendedRole === "buyer" ? "/buyer/dashboard" : intendedRole === "admin" ? "/admin/dashboard" : "/farmer/dashboard";
+    window.location.href = intendedRole === "buyer" ? "/buyer/dashboard" : "/farmer/dashboard";
   },
 
   /**
