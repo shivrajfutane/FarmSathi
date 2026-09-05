@@ -202,13 +202,13 @@ export const Marketplace: React.FC = () => {
 
                 <div className="p-4 space-y-3">
                   <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <h4 className="font-black text-lg text-foreground">
+                    <div className="min-w-0">
+                      <h4 className="font-black text-lg text-foreground truncate">
                         {lot.crop}
                       </h4>
-                      <p className="text-xs text-muted-foreground">{lot.variety}</p>
+                      <p className="text-xs text-muted-foreground truncate">{lot.variety}</p>
                     </div>
-                    <div className="text-right">
+                    <div className="text-right shrink-0">
                       <div className="text-lg font-black text-green-700">
                         {formatCurrency(lot.expectedPrice)}
                       </div>
@@ -217,17 +217,21 @@ export const Marketplace: React.FC = () => {
                   </div>
 
                   <div className="space-y-1.5 text-xs text-muted-foreground p-3 rounded-xl bg-slate-50 border">
-                    <div className="flex justify-between">
-                      <span>Location:</span>
-                      <strong className="text-foreground font-semibold">{lot.locationDistrict}, {lot.locationState}</strong>
+                    <div className="flex justify-between items-center gap-2">
+                      <span className="shrink-0">Location:</span>
+                      <strong className="text-foreground font-semibold truncate text-right">
+                        {lot.locationDistrict}, {lot.locationState}
+                      </strong>
                     </div>
-                    <div className="flex justify-between">
-                      <span>Harvest Date:</span>
-                      <strong className="text-foreground">{formatDate(lot.harvestDate)}</strong>
+                    <div className="flex justify-between items-center gap-2">
+                      <span className="shrink-0">Harvest Date:</span>
+                      <strong className="text-foreground text-right">{formatDate(lot.harvestDate)}</strong>
                     </div>
-                    <div className="flex justify-between">
-                      <span>Available:</span>
-                      <strong className="text-foreground font-bold">{lot.quantity} {lot.unit}</strong>
+                    <div className="flex justify-between items-center gap-2">
+                      <span className="shrink-0">Available:</span>
+                      <strong className="text-foreground font-bold text-right">
+                        {lot.quantity} {lot.unit}
+                      </strong>
                     </div>
                   </div>
                 </div>

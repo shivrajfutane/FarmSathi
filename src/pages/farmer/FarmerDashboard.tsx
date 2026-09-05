@@ -94,17 +94,17 @@ export const FarmerDashboard: React.FC = () => {
         
         <div className="space-y-1.5 relative z-10">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-700/80 text-emerald-100 border border-emerald-500/30">
+            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-700/80 text-white border border-emerald-500/30">
               Kisan Portal 2026
             </span>
             <VerifiedBadge type="farmer" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
             Good morning, {user?.fullName || "Farmer"} 👋
           </h1>
-          <p className="text-xs sm:text-sm text-emerald-200/90 flex items-center gap-1.5">
-            <MapPin className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Baramati, Pune District • APMC Benchmark Mandi Live</span>
+          <p className="text-xs sm:text-sm text-white/95 flex items-center gap-1.5">
+            <MapPin className="w-3.5 h-3.5 text-white" />
+            <span className="text-white">Baramati, Pune District • APMC Benchmark Mandi Live</span>
           </p>
         </div>
 

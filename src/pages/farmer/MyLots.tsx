@@ -82,28 +82,28 @@ export const MyLots: React.FC = () => {
               )}
 
               <div className="p-5 space-y-4">
-                <div className="flex items-start justify-between gap-2">
-                  <div>
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <h3 className="font-extrabold text-base text-foreground">
+                      <h3 className="font-extrabold text-base text-foreground truncate">
                         {lot.crop} ({lot.variety})
                       </h3>
                       {(!lot.images || lot.images.length === 0) && (
                         <>
-                          <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-200">
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-200 shrink-0">
                             Grade {lot.grade}
                           </span>
                           <StatusBadge status={lot.status} />
                         </>
                       )}
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5 text-green-700" />
-                      <span>{lot.locationVillage}, {lot.locationDistrict}, {lot.locationState}</span>
+                    <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1 flex-wrap">
+                      <MapPin className="w-3.5 h-3.5 text-green-700 shrink-0" />
+                      <span className="truncate">{lot.locationVillage}, {lot.locationDistrict}, {lot.locationState}</span>
                     </p>
                   </div>
 
-                  <div className="text-right">
+                  <div className="text-right shrink-0">
                     <span className="text-base font-black text-green-700">
                       {formatCurrency(lot.expectedPrice)}
                     </span>

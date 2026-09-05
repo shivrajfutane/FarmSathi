@@ -16,11 +16,36 @@ import {
   Award,
   Star,
   CheckCircle,
+  Camera,
+  Upload,
 } from "lucide-react";
 
 export const FarmerProfile: React.FC = () => {
   const { user } = useAuth();
   const farmer = mockFarmer;
+  const [profilePhoto, setProfilePhoto] = React.useState<string | undefined>(
+    user?.profilePhoto
+  );
+
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        if (ev.target?.result) {
+          const photoUrl = ev.target.result as string;
+          setProfilePhoto(photoUrl);
+          const stored = localStorage.getItem("agrimarket_user");
+          if (stored) {
+            const u = JSON.parse(stored);
+            u.profilePhoto = photoUrl;
+            localStorage.setItem("agrimarket_user", JSON.stringify(u));
+          }
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   return (
     <div className="page-container max-w-4xl mx-auto space-y-6 animate-fade-in">
@@ -30,13 +55,22 @@ export const FarmerProfile: React.FC = () => {
         <CardContent className="p-6 relative pt-0">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 -mt-12 mb-4">
             <div className="flex items-end gap-3.5">
-              <div className="relative -mt-12">
+              <div className="relative -mt-12 group">
                 <UserAvatar
                   fullName={user?.fullName}
-                  photoUrl={user?.profilePhoto}
+                  photoUrl={profilePhoto || user?.profilePhoto}
                   size="w-24 h-24"
-                  className="border-4 border-white shadow-lg rounded-2xl"
+                  className="border-4 border-white shadow-lg rounded-2xl object-cover"
                 />
+                <label className="absolute bottom-0 right-0 bg-green-700 hover:bg-green-800 text-white p-1.5 rounded-full shadow-md cursor-pointer border-2 border-white transition-transform group-hover:scale-110">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handlePhotoUpload}
+                  />
+                  <Camera className="w-3.5 h-3.5" />
+                </label>
               </div>
               <div className="space-y-1">
                 <div className="flex items-center gap-2 flex-wrap">
@@ -52,7 +86,7 @@ export const FarmerProfile: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <div className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-amber-50 border border-amber-200 text-xs font-bold text-amber-800">
                 <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
                 <span>4.8 Rating (18 Transactions)</span>

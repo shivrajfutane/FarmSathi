@@ -148,12 +148,12 @@ export const OfferManagement: React.FC = () => {
                     Valid until {formatDate(offer.validUntil)}
                   </span>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap w-full sm:w-auto">
                     <Button
                       size="sm"
                       variant="outline"
                       onClick={() => handleAction(offer.id, "reject")}
-                      className="text-xs text-destructive border-destructive/30 hover:bg-destructive/10"
+                      className="text-xs text-destructive border-destructive/30 hover:bg-destructive/10 flex-1 sm:flex-initial"
                     >
                       <XCircle className="w-3.5 h-3.5 mr-1" />
                       Decline
@@ -166,7 +166,7 @@ export const OfferManagement: React.FC = () => {
                         setCounterModalOffer(offer);
                         setCounterPrice((offer.offeredPrice + 100).toString());
                       }}
-                      className="text-xs border-green-300 text-green-800 hover:bg-green-50"
+                      className="text-xs border-green-300 text-green-800 hover:bg-green-50 flex-1 sm:flex-initial"
                     >
                       <RotateCcw className="w-3.5 h-3.5 mr-1" />
                       Counter Offer
@@ -175,7 +175,7 @@ export const OfferManagement: React.FC = () => {
                     <Button
                       size="sm"
                       onClick={() => handleAction(offer.id, "accept")}
-                      className="text-xs bg-green-700 hover:bg-green-800 text-white font-bold"
+                      className="text-xs bg-green-700 hover:bg-green-800 text-white font-bold w-full sm:w-auto"
                     >
                       <CheckCircle className="w-3.5 h-3.5 mr-1" />
                       Accept & Arrange Transport

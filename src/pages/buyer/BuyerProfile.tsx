@@ -12,11 +12,35 @@ import {
   Clock,
   PackageCheck,
   FileText,
+  Camera,
 } from "lucide-react";
 
 export const BuyerProfile: React.FC = () => {
   const { user } = useAuth();
   const buyer = mockBuyer;
+  const [companyLogo, setCompanyLogo] = React.useState<string | undefined>(
+    user?.profilePhoto
+  );
+
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        if (ev.target?.result) {
+          const logoUrl = ev.target.result as string;
+          setCompanyLogo(logoUrl);
+          const stored = localStorage.getItem("agrimarket_user");
+          if (stored) {
+            const u = JSON.parse(stored);
+            u.profilePhoto = logoUrl;
+            localStorage.setItem("agrimarket_user", JSON.stringify(u));
+          }
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   return (
     <div className="page-container max-w-4xl mx-auto space-y-6 animate-fade-in">
@@ -25,8 +49,27 @@ export const BuyerProfile: React.FC = () => {
         <CardContent className="p-6 relative pt-0">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 -mt-12 mb-4">
             <div className="flex items-end gap-3.5">
-              <div className="w-24 h-24 rounded-2xl bg-white border-4 border-white shadow-md flex items-center justify-center text-green-900 font-black text-2xl bg-gradient-to-br from-green-100 to-emerald-200">
-                <Building2 className="w-12 h-12 text-green-800" />
+              <div className="relative -mt-12 group">
+                <div className="w-24 h-24 rounded-2xl bg-white border-4 border-white shadow-md flex items-center justify-center text-green-900 font-black text-2xl overflow-hidden bg-gradient-to-br from-green-100 to-emerald-200">
+                  {companyLogo ? (
+                    <img
+                      src={companyLogo}
+                      alt="Company Logo"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <Building2 className="w-12 h-12 text-green-800" />
+                  )}
+                </div>
+                <label className="absolute bottom-0 right-0 bg-green-700 hover:bg-green-800 text-white p-1.5 rounded-full shadow-md cursor-pointer border-2 border-white transition-transform group-hover:scale-110">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleLogoUpload}
+                  />
+                  <Camera className="w-3.5 h-3.5" />
+                </label>
               </div>
               <div className="space-y-1">
                 <div className="flex items-center gap-2 flex-wrap">
@@ -35,14 +78,14 @@ export const BuyerProfile: React.FC = () => {
                   </h2>
                   <VerifiedBadge type="buyer" />
                 </div>
-                <p className="text-xs text-muted-foreground flex items-center gap-1">
-                  <MapPin className="w-3.5 h-3.5 text-green-700" />
+                <p className="text-xs text-muted-foreground flex items-center gap-1 flex-wrap">
+                  <MapPin className="w-3.5 h-3.5 text-green-700 shrink-0" />
                   <span>{buyer.district}, {buyer.state} • GSTIN: {buyer.gstNumber}</span>
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <div className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-800">
                 <ShieldCheck className="w-4 h-4 text-emerald-600" />
                 <span>96% Payment Reliability</span>

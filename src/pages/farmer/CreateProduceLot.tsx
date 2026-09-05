@@ -22,6 +22,55 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
+const CROP_SAMPLE_IMAGES: Record<string, string[]> = {
+  Tomato: [
+    "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=800&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1546470427-e26264be0b11?w=800&auto=format&fit=crop&q=80",
+  ],
+  Onion: [
+    "https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=800&auto=format&fit=crop&q=80",
+  ],
+  Potato: [
+    "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=800&auto=format&fit=crop&q=80",
+  ],
+  Wheat: [
+    "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=800&auto=format&fit=crop&q=80",
+  ],
+  Rice: [
+    "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=800&auto=format&fit=crop&q=80",
+  ],
+  Maize: [
+    "https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=800&auto=format&fit=crop&q=80",
+  ],
+  Soybean: [
+    "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?w=800&auto=format&fit=crop&q=80",
+  ],
+  Cotton: [
+    "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=800&auto=format&fit=crop&q=80",
+  ],
+  Garlic: [
+    "https://images.unsplash.com/photo-1540148426945-6cf22a6b2383?w=800&auto=format&fit=crop&q=80",
+  ],
+  Chilli: [
+    "https://images.unsplash.com/photo-1588252303782-cb80119abd6d?w=800&auto=format&fit=crop&q=80",
+  ],
+  Apple: [
+    "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=800&auto=format&fit=crop&q=80",
+  ],
+  Banana: [
+    "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=800&auto=format&fit=crop&q=80",
+  ],
+  Grapes: [
+    "https://images.unsplash.com/photo-1537640538966-79f369143f8f?w=800&auto=format&fit=crop&q=80",
+  ],
+  Mango: [
+    "https://images.unsplash.com/photo-1553279768-865429fa0078?w=800&auto=format&fit=crop&q=80",
+  ],
+  Pomegranate: [
+    "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=800&auto=format&fit=crop&q=80",
+  ],
+};
+
 export const CreateProduceLot: React.FC = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
@@ -41,6 +90,7 @@ export const CreateProduceLot: React.FC = () => {
   const [freshness, setFreshness] = useState<"fresh" | "good" | "average">("fresh");
   const [defects, setDefects] = useState<"none" | "minor" | "moderate">("none");
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+  const [imageUrlInput, setImageUrlInput] = useState("");
   const [isAiGrading, setIsAiGrading] = useState(false);
   const [aiConfidence, setAiConfidence] = useState(91);
 
@@ -65,9 +115,23 @@ export const CreateProduceLot: React.FC = () => {
     }, 1000);
   };
 
+  const handleAddImageUrl = () => {
+    if (imageUrlInput.trim()) {
+      setUploadedImages((prev) => [...prev, imageUrlInput.trim()].slice(0, 3));
+      setImageUrlInput("");
+    }
+  };
+
   const handlePublish = async () => {
     setIsSubmitting(true);
     try {
+      const finalImages =
+        uploadedImages.length > 0
+          ? uploadedImages
+          : CROP_SAMPLE_IMAGES[crop] || [
+              "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=800&auto=format&fit=crop&q=80",
+            ];
+
       await lotsService.createLot({
         farmerId: "f1",
         crop,
@@ -81,7 +145,7 @@ export const CreateProduceLot: React.FC = () => {
           freshness,
           visibleDefects: defects,
         },
-        images: uploadedImages,
+        images: finalImages,
         harvestDate,
         availableFrom,
         locationState: state,
@@ -374,55 +438,160 @@ export const CreateProduceLot: React.FC = () => {
               </div>
 
               {/* Upload Image Section */}
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-foreground">Produce Images (1-3 photos)</label>
-                
-                {uploadedImages.length > 0 && (
-                  <div className="flex gap-2 flex-wrap mb-2">
+              <div className="space-y-3 pt-1">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-foreground flex items-center gap-1.5">
+                    <ImageIcon className="w-3.5 h-3.5 text-green-700" />
+                    <span>Produce Images ({uploadedImages.length}/3 photos)</span>
+                  </label>
+                  {uploadedImages.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setUploadedImages([])}
+                      className="text-[11px] text-red-600 hover:underline font-medium"
+                    >
+                      Clear all
+                    </button>
+                  )}
+                </div>
+
+                {/* Image Previews */}
+                {uploadedImages.length > 0 ? (
+                  <div className="grid grid-cols-3 gap-2.5">
                     {uploadedImages.map((img, idx) => (
-                      <div key={idx} className="relative w-20 h-20 rounded-lg overflow-hidden border bg-slate-100 flex items-center justify-center">
-                        <img src={img} alt={`Produce ${idx + 1}`} className="w-full h-full object-cover" />
+                      <div
+                        key={idx}
+                        className="relative h-24 rounded-xl overflow-hidden border-2 border-emerald-500/50 bg-slate-100 shadow-xs group"
+                      >
+                        <img
+                          src={img}
+                          alt={`Produce ${idx + 1}`}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                        />
                         <button
                           type="button"
-                          onClick={() => setUploadedImages(uploadedImages.filter((_, i) => i !== idx))}
-                          className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 text-[10px] w-4 h-4 flex items-center justify-center"
+                          onClick={() =>
+                            setUploadedImages(uploadedImages.filter((_, i) => i !== idx))
+                          }
+                          className="absolute top-1.5 right-1.5 bg-red-600/90 hover:bg-red-700 text-white rounded-full p-1 text-[10px] w-5 h-5 flex items-center justify-center shadow-md transition-colors"
                         >
                           ✕
                         </button>
+                        <span className="absolute bottom-1 left-1.5 bg-black/60 backdrop-blur-xs text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
+                          Photo {idx + 1}
+                        </span>
                       </div>
                     ))}
                   </div>
+                ) : (
+                  <div className="p-3 bg-amber-50/70 border border-amber-200/80 rounded-xl text-[11px] text-amber-800 flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-amber-600 shrink-0" />
+                    <span>
+                      Adding photos increases buyer offer rates by <strong>+42%</strong>. You can upload files, paste URLs, or pick standard presets below.
+                    </span>
+                  </div>
                 )}
 
-                <label className="cursor-pointer p-4 border-2 border-dashed border-emerald-300 rounded-xl flex flex-col items-center justify-center text-center bg-emerald-50/30 hover:bg-emerald-50/60 transition-colors">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    className="hidden"
-                    onChange={(e) => {
-                      if (e.target.files) {
-                        const files = Array.from(e.target.files);
-                        files.forEach((file) => {
-                          const reader = new FileReader();
-                          reader.onload = (ev) => {
-                            if (ev.target?.result) {
-                              setUploadedImages((prev) => [...prev, ev.target!.result as string].slice(0, 3));
+                {/* Option 1: File Upload from Device */}
+                {uploadedImages.length < 3 && (
+                  <label className="cursor-pointer p-4 border-2 border-dashed border-emerald-300 rounded-xl flex flex-col items-center justify-center text-center bg-emerald-50/30 hover:bg-emerald-50/70 transition-colors">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      className="hidden"
+                      onChange={(e) => {
+                        if (e.target.files) {
+                          const files = Array.from(e.target.files);
+                          files.forEach((file) => {
+                            const reader = new FileReader();
+                            reader.onload = (ev) => {
+                              if (ev.target?.result) {
+                                setUploadedImages((prev) =>
+                                  [...prev, ev.target!.result as string].slice(0, 3)
+                                );
+                              }
+                            };
+                            reader.readAsDataURL(file);
+                          });
+                        }
+                      }}
+                    />
+                    <UploadCloud className="w-7 h-7 text-green-700 mb-1" />
+                    <p className="text-xs font-semibold text-foreground">
+                      Upload photos from your phone / computer
+                    </p>
+                    <p className="text-[10px] text-muted-foreground mt-0.5">
+                      JPG, PNG, WebP (up to 3 photos)
+                    </p>
+                  </label>
+                )}
+
+                {/* Option 2: Image URL Input */}
+                {uploadedImages.length < 3 && (
+                  <div className="space-y-1.5 pt-1">
+                    <span className="text-[11px] font-semibold text-muted-foreground block">
+                      Or paste an Image Web Link:
+                    </span>
+                    <div className="flex gap-2">
+                      <Input
+                        type="url"
+                        placeholder="https://example.com/produce.jpg"
+                        value={imageUrlInput}
+                        onChange={(e) => setImageUrlInput(e.target.value)}
+                        className="text-xs h-9"
+                      />
+                      <Button
+                        type="button"
+                        onClick={handleAddImageUrl}
+                        disabled={!imageUrlInput.trim()}
+                        size="sm"
+                        className="bg-green-700 hover:bg-green-800 text-white shrink-0 text-xs"
+                      >
+                        Add Image
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Option 3: 1-Click Crop Sample Preset Images */}
+                {CROP_SAMPLE_IMAGES[crop] && uploadedImages.length < 3 && (
+                  <div className="space-y-1.5 pt-1 border-t border-dashed">
+                    <span className="text-[11px] font-semibold text-muted-foreground flex items-center gap-1">
+                      <Sparkles className="w-3 h-3 text-emerald-600" />
+                      Quick {crop} sample photos (1-click attach):
+                    </span>
+                    <div className="flex gap-2 flex-wrap">
+                      {CROP_SAMPLE_IMAGES[crop].map((presetUrl, pIdx) => (
+                        <button
+                          key={pIdx}
+                          type="button"
+                          onClick={() => {
+                            if (!uploadedImages.includes(presetUrl)) {
+                              setUploadedImages((prev) => [...prev, presetUrl].slice(0, 3));
                             }
-                          };
-                          reader.readAsDataURL(file);
-                        });
-                      }
-                    }}
-                  />
-                  <UploadCloud className="w-8 h-8 text-green-700 mb-1" />
-                  <p className="text-xs font-semibold text-foreground">
-                    Click to select produce photos from your device
-                  </p>
-                  <p className="text-[10px] text-muted-foreground mt-0.5">
-                    JPG, PNG (Clear photos help AI grading & verified buyer bids)
-                  </p>
-                </label>
+                          }}
+                          className={`relative w-16 h-16 rounded-lg overflow-hidden border transition-all hover:scale-105 ${
+                            uploadedImages.includes(presetUrl)
+                              ? "ring-2 ring-emerald-600 border-emerald-600 opacity-60"
+                              : "border-slate-300 hover:border-emerald-500"
+                          }`}
+                        >
+                          <img
+                            src={presetUrl}
+                            alt={`${crop} preset ${pIdx + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                          {uploadedImages.includes(presetUrl) && (
+                            <span className="absolute inset-0 bg-emerald-900/60 flex items-center justify-center text-white font-bold text-xs">
+                              ✓
+                            </span>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}

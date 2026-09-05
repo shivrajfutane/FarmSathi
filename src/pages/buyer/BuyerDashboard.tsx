@@ -56,26 +56,26 @@ export const BuyerDashboard: React.FC = () => {
   return (
     <div className="page-container space-y-6 animate-fade-in">
       {/* Buyer Welcome Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-green-800 via-forest-900 to-forest-950 text-white p-6 sm:p-7 rounded-2xl shadow-md">
-        <div className="space-y-1.5">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-green-700/80 text-green-100 border border-green-500/30">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-green-800 via-forest-900 to-forest-950 text-white p-6 sm:p-7 rounded-2xl shadow-md overflow-hidden relative">
+        <div className="space-y-1.5 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-green-700/80 text-white border border-green-500/30">
               Institutional Procurement Portal
             </span>
             <VerifiedBadge type="buyer" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white break-words">
             Welcome, {user?.fullName || "Arjun Mehta"} (ABC Foods)
           </h1>
-          <p className="text-xs sm:text-sm text-emerald-200/90 flex items-center gap-1.5">
-            <MapPin className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Procurement Hub: Mumbai, Maharashtra • GSTIN Verified</span>
+          <p className="text-xs sm:text-sm text-white/95 flex items-center gap-1.5 flex-wrap">
+            <MapPin className="w-3.5 h-3.5 text-white shrink-0" />
+            <span className="text-white">Procurement Hub: Mumbai, Maharashtra • GSTIN Verified</span>
           </p>
         </div>
 
         <Button
           onClick={() => navigate("/buyer/marketplace")}
-          className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold gap-1.5 shadow-md self-start md:self-auto"
+          className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold gap-1.5 shadow-md self-start md:self-auto shrink-0"
         >
           <Store className="w-4 h-4" />
           <span>Browse Farmer Lots</span>
