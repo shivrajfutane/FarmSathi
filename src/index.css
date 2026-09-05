@@ -1,0 +1,237 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900;1,14..32,400&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────────
+   FARMSATHI — GREEN GRADIENT DESIGN SYSTEM
+   Primary: Emerald/Forest Green  ·  Accent: Leaf Green
+   Background: Pure white  ·  Surfaces: Soft green-tinted whites
+───────────────────────────────────────────────────────────── */
+
+@layer base {
+  :root {
+    /* ── Core backgrounds ── */
+    --background:       0 0% 100%;          /* pure white */
+    --foreground:       150 45% 9%;         /* deep forest text */
+
+    /* ── Card surfaces ── */
+    --card:             0 0% 100%;
+    --card-foreground:  150 45% 9%;
+
+    /* ── Popover ── */
+    --popover:          0 0% 100%;
+    --popover-foreground: 150 45% 9%;
+
+    /* ── Primary – rich forest green ── */
+    --primary:          145 63% 24%;        /* #176534 */
+    --primary-foreground: 0 0% 100%;
+
+    /* ── Secondary – light mint tint ── */
+    --secondary:        138 40% 93%;        /* #e8f5ee */
+    --secondary-foreground: 145 50% 15%;
+
+    /* ── Muted – very pale green-grey ── */
+    --muted:            138 25% 95%;
+    --muted-foreground: 145 15% 42%;
+
+    /* ── Accent – bright leaf green ── */
+    --accent:           152 72% 40%;        /* #1a8f52 */
+    --accent-foreground: 0 0% 100%;
+
+    /* ── Destructive ── */
+    --destructive:      0 78% 52%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* ── Borders ── */
+    --border:           140 20% 88%;        /* subtle green-grey border */
+    --input:            140 20% 86%;
+    --ring:             145 63% 30%;
+
+    /* ── Border radius ── */
+    --radius: 0.7rem;
+
+    /* ── Green gradient custom tokens ── */
+    --grad-hero:        linear-gradient(135deg, #0d4225 0%, #145c34 40%, #1a7a46 70%, #22a05a 100%);
+    --grad-card:        linear-gradient(135deg, #f0fdf6 0%, #ffffff 100%);
+    --grad-sidebar:     linear-gradient(180deg, #0d4225 0%, #10522c 60%, #0f4a28 100%);
+    --grad-header:      linear-gradient(90deg, #f0fdf6 0%, #ffffff 100%);
+    --grad-btn-primary: linear-gradient(135deg, #15803d 0%, #059669 100%);
+    --grad-accent-strip: linear-gradient(90deg, #16a34a 0%, #10b981 50%, #14b8a6 100%);
+  }
+
+  /* ── Global reset & base ── */
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #ffffff;
+    color: hsl(var(--foreground));
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight;
+    color: hsl(150, 45%, 9%);
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(140, 30%, 80%);
+    border-radius: 99px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(142, 50%, 40%);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   COMPONENT CLASSES
+───────────────────────────────────────────────────────────── */
+@layer components {
+
+  /* ── Page wrapper ── */
+  .page-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6;
+  }
+
+  /* ── Cards ── */
+  .card-hover {
+    @apply transition-all duration-200 hover:shadow-lg hover:border-emerald-300 hover:-translate-y-0.5;
+  }
+
+  /* ── Prices ── */
+  .price-up   { @apply text-emerald-700 font-bold; }
+  .price-down { @apply text-red-600 font-bold; }
+
+  /* ── Status badges ── */
+  .status-badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold;
+  }
+
+  /* ── Sidebar navigation ── */
+  .nav-link {
+    @apply flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150;
+  }
+  .nav-link-active {
+    background: rgba(255,255,255,0.18);
+    @apply text-white font-semibold shadow-sm;
+    border-left: 3px solid rgba(134,239,172,0.9);
+  }
+  .nav-link-inactive {
+    @apply text-emerald-100/75 hover:bg-white/10 hover:text-white;
+  }
+
+  /* ── Form section ── */
+  .form-section {
+    @apply space-y-4 p-5 rounded-xl border border-emerald-100 bg-white shadow-sm;
+  }
+
+  /* ── Green gradient button ── */
+  .btn-green-gradient {
+    background: var(--grad-btn-primary);
+    @apply text-white font-semibold rounded-xl px-5 py-2.5 transition-all duration-200 hover:opacity-90 hover:shadow-md active:scale-[.98];
+  }
+
+  /* ── Glassmorphism card ── */
+  .glass-card {
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    @apply border border-emerald-100/80 rounded-2xl shadow-md;
+  }
+
+  /* ── Gradient header/hero ── */
+  .hero-gradient {
+    background: var(--grad-hero);
+  }
+
+  /* ── Sidebar gradient ── */
+  .sidebar-gradient {
+    background: var(--grad-sidebar);
+  }
+
+  /* ── Leaflet override ── */
+  .leaflet-container {
+    @apply rounded-xl;
+    font-family: Inter, sans-serif;
+  }
+
+  /* ── Green accent strip ── */
+  .accent-strip {
+    background: var(--grad-accent-strip);
+    @apply h-1 rounded-full;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   UTILITIES
+───────────────────────────────────────────────────────────── */
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+
+  /* ── Animations ── */
+  .animate-fade-in {
+    animation: fade-in 0.25s ease-out both;
+  }
+  .animate-slide-up {
+    animation: slide-up 0.3s ease-out both;
+  }
+  .animate-scale-in {
+    animation: scale-in 0.2s ease-out both;
+  }
+
+  /* ── Green gradient text ── */
+  .text-green-gradient {
+    background: linear-gradient(135deg, #15803d 0%, #059669 60%, #10b981 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── Subtle green glow shadow ── */
+  .shadow-green {
+    box-shadow: 0 4px 24px -4px rgba(21, 128, 61, 0.18);
+  }
+  .shadow-green-lg {
+    box-shadow: 0 8px 40px -8px rgba(21, 128, 61, 0.25);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   KEYFRAMES
+───────────────────────────────────────────────────────────── */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
